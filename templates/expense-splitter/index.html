@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Splitwise-style Expense Splitter</title>
+<meta name="description" content="Split trip and flatmate expenses, then settle up in the fewest possible payments. Runs entirely in your browser.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="mark" aria-hidden="true">÷</span>
+    <div>
+      <strong>Split</strong>
+      <small>Settle up in the fewest payments</small>
+    </div>
+  </div>
+  <div class="actions">
+    <button type="button" id="sampleBtn" class="btn ghost">Load a sample trip</button>
+    <button type="button" id="clearBtn" class="btn ghost">Clear</button>
+  </div>
+</header>
+
+<main class="grid">
+
+  <!-- ── People + add expense ── -->
+  <section class="col">
+    <div class="card">
+      <h2>People</h2>
+      <form id="personForm" class="inline-form">
+        <input type="text" id="personName" maxlength="30" placeholder="Add a name" required>
+        <button type="submit" class="btn primary">Add</button>
+      </form>
+      <ul id="peopleList" class="chips"></ul>
+      <p class="hint" id="peopleHint">Add at least two people to record an expense.</p>
+    </div>
+
+    <div class="card">
+      <h2>Add an expense</h2>
+      <form id="expenseForm">
+        <label>What was it for
+          <input type="text" id="expDesc" maxlength="60" placeholder="Dinner at Toit" required>
+        </label>
+        <div class="row">
+          <label>Amount
+            <input type="number" id="expAmount" min="0.01" step="0.01" placeholder="0.00" required>
+          </label>
+          <label>Paid by
+            <select id="expPayer" required></select>
+          </label>
+        </div>
+
+        <fieldset class="split">
+          <legend>Split between</legend>
+          <div class="split-mode">
+            <label><input type="radio" name="mode" value="equal" checked> Equally</label>
+            <label><input type="radio" name="mode" value="exact"> Exact amounts</label>
+          </div>
+          <div id="participants" class="participants"></div>
+          <p class="hint" id="splitHint"></p>
+        </fieldset>
+
+        <button type="submit" class="btn primary wide" id="addExpenseBtn">Add expense</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ── Balances + settlement + history ── -->
+  <section class="col">
+    <div class="card">
+      <h2>Balances</h2>
+      <ul id="balances" class="balances"></ul>
+      <p class="hint" id="balancesHint">No expenses recorded yet.</p>
+    </div>
+
+    <div class="card settle">
+      <h2>Settle up</h2>
+      <p class="lede" id="settleLede"></p>
+      <ol id="settlements" class="settlements"></ol>
+    </div>
+
+    <div class="card">
+      <h2>History <span class="count" id="expenseCount"></span></h2>
+      <ul id="expenses" class="expenses"></ul>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

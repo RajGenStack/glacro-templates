@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GST Invoice Generator</title>
+<meta name="description" content="Create a GST-compliant tax invoice in the browser. CGST/SGST/IGST split, amount in words, print to PDF. Nothing leaves your device.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar no-print">
+  <div class="brand">
+    <span class="mark">₹</span>
+    <div>
+      <strong>GST Invoice Generator</strong>
+      <small>Everything stays in your browser</small>
+    </div>
+  </div>
+  <div class="actions">
+    <button type="button" id="loadSample" class="btn ghost">Load sample</button>
+    <button type="button" id="resetAll" class="btn ghost">Reset</button>
+    <button type="button" id="printBtn" class="btn primary">Print / Save PDF</button>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ─────────── Editor ─────────── -->
+  <section class="editor no-print" aria-label="Invoice details">
+
+    <fieldset>
+      <legend>Your business (seller)</legend>
+      <label>Business name <input type="text" id="sellerName" placeholder="Acme Design Studio"></label>
+      <label>GSTIN <input type="text" id="sellerGstin" placeholder="27AAAPA1234A1ZT" maxlength="15" spellcheck="false"></label>
+      <p class="hint" id="sellerGstinHint"></p>
+      <label>Address <textarea id="sellerAddress" rows="3" placeholder="221B Linking Road&#10;Bandra West, Mumbai 400050"></textarea></label>
+      <label>State of supply
+        <select id="sellerState"></select>
+      </label>
+      <label>Email <input type="email" id="sellerEmail" placeholder="billing@acme.in"></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Bill to (buyer)</legend>
+      <label>Name <input type="text" id="buyerName" placeholder="Nimbus Retail Pvt Ltd"></label>
+      <label>GSTIN <span class="opt">optional</span> <input type="text" id="buyerGstin" placeholder="29AAQCN9876B1ZP" maxlength="15" spellcheck="false"></label>
+      <p class="hint" id="buyerGstinHint"></p>
+      <label>Address <textarea id="buyerAddress" rows="3" placeholder="12 MG Road&#10;Bengaluru 560001"></textarea></label>
+      <label>Place of supply
+        <select id="buyerState"></select>
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Invoice</legend>
+      <div class="row">
+        <label>Number <input type="text" id="invoiceNo" placeholder="INV-2026-001"></label>
+        <label>Date <input type="date" id="invoiceDate"></label>
+      </div>
+      <div class="row">
+        <label>Due date <input type="date" id="dueDate"></label>
+        <label>Currency
+          <select id="currency">
+            <option value="INR">₹ INR</option>
+            <option value="USD">$ USD</option>
+            <option value="EUR">€ EUR</option>
+            <option value="GBP">£ GBP</option>
+          </select>
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Line items</legend>
+      <div id="itemRows" class="item-rows"></div>
+      <button type="button" id="addItem" class="btn ghost wide">+ Add line item</button>
+      <div class="row">
+        <label>Discount (%) <input type="number" id="discountPct" min="0" max="100" step="0.01" value="0"></label>
+        <label>Shipping <input type="number" id="shipping" min="0" step="0.01" value="0"></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Notes</legend>
+      <label>Payment terms / notes
+        <textarea id="notes" rows="3" placeholder="Payment due within 15 days. NEFT to Acme Design Studio, A/C 0000 0000 0000, IFSC HDFC0000001."></textarea>
+      </label>
+    </fieldset>
+
+    <p class="privacy">
+      Nothing is uploaded. The invoice is rendered in this page and saved to
+      this browser's local storage so a refresh does not lose your work.
+    </p>
+  </section>
+
+  <!-- ─────────── Preview ─────────── -->
+  <section class="preview" aria-label="Invoice preview">
+    <article class="invoice" id="invoice">
+
+      <div class="inv-head">
+        <div>
+          <h1 id="pvSellerName">Your business name</h1>
+          <p class="muted" id="pvSellerAddress"></p>
+          <p class="muted" id="pvSellerGstin"></p>
+          <p class="muted" id="pvSellerEmail"></p>
+        </div>
+        <div class="inv-meta">
+          <h2>Tax Invoice</h2>
+          <table>
+            <tr><td>Invoice #</td><th id="pvInvoiceNo">—</th></tr>
+            <tr><td>Date</td><th id="pvInvoiceDate">—</th></tr>
+            <tr><td>Due</td><th id="pvDueDate">—</th></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="parties">
+        <div>
+          <h3>Bill to</h3>
+          <p><strong id="pvBuyerName">—</strong></p>
+          <p class="muted" id="pvBuyerAddress"></p>
+          <p class="muted" id="pvBuyerGstin"></p>
+        </div>
+        <div>
+          <h3>Place of supply</h3>
+          <p id="pvPlaceOfSupply">—</p>
+          <p class="muted" id="pvSupplyType"></p>
+        </div>
+      </div>
+
+      <table class="lines">
+        <thead>
+          <tr>
+            <th class="c-desc">Description</th>
+            <th class="c-hsn">HSN/SAC</th>
+            <th class="c-num">Qty</th>
+            <th class="c-num">Rate</th>
+            <th class="c-num">GST%</th>
+            <th class="c-num">Taxable</th>
+            <th class="c-num">Tax</th>
+            <th class="c-num">Amount</th>
+          </tr>
+        </thead>
+        <tbody id="pvLines"></tbody>
+      </table>
+
+      <div class="totals-wrap">
+        <div class="hsn-summary">
+          <h3>Tax summary by rate</h3>
+          <table id="pvTaxSummary"></table>
+        </div>
+        <table class="totals" id="pvTotals"></table>
+      </div>
+
+      <p class="in-words"><span>Amount in words:</span> <strong id="pvWords">—</strong></p>
+
+      <div class="inv-foot">
+        <p class="muted" id="pvNotes"></p>
+        <div class="sign">
+          <div class="sign-line"></div>
+          <small>Authorised signatory</small>
+        </div>
+      </div>
+    </article>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

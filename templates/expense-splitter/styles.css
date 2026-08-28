@@ -1,0 +1,266 @@
+/* Split — shared expense splitter. */
+
+:root {
+  --bg: #f6f6f4;
+  --panel: #ffffff;
+  --ink: #16160f;
+  --muted: #6f6b62;
+  --line: #e5e2db;
+  --up: #147a52;
+  --up-soft: #e6f4ee;
+  --down: #b3402a;
+  --down-soft: #fbeee9;
+  --accent: #1f2937;
+  --radius: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #101013;
+    --panel: #18181c;
+    --ink: #f1efea;
+    --muted: #99948b;
+    --line: #27272c;
+    --up: #4ec294;
+    --up-soft: #14261f;
+    --down: #e58a72;
+    --down-soft: #2a1a16;
+    --accent: #e9e7e2;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Top bar ─────────────────────────────────────────────────────────────── */
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 22px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand { display: flex; align-items: center; gap: 12px; }
+
+.brand .mark {
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--panel);
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.brand strong { display: block; font-size: 15px; }
+.brand small { color: var(--muted); font-size: 12px; }
+
+.actions { display: flex; gap: 8px; }
+
+.btn {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 15px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled) { border-color: var(--ink); }
+.btn.primary { background: var(--accent); color: var(--panel); border-color: var(--accent); }
+.btn.wide { width: 100%; margin-top: 6px; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 22px;
+  align-items: start;
+}
+
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+
+.col { display: grid; gap: 18px; }
+
+.card {
+  padding: 18px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.card h2 {
+  margin: 0 0 14px;
+  font-size: 11px;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.card h2 .count { color: var(--muted); font-weight: 400; }
+
+label { display: block; margin-bottom: 12px; font-size: 12px; font-weight: 600; color: var(--muted); }
+
+input[type="text"], input[type="number"], select {
+  width: 100%;
+  margin-top: 5px;
+  padding: 9px 11px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  outline: none;
+}
+
+input:focus, select:focus { border-color: var(--ink); }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.inline-form { display: flex; gap: 8px; margin-bottom: 12px; }
+.inline-form input { margin-top: 0; }
+
+.hint { margin: 8px 0 0; font-size: 11.5px; color: var(--muted); }
+
+/* ── People chips ────────────────────────────────────────────────────────── */
+.chips { list-style: none; display: flex; flex-wrap: wrap; gap: 7px; margin: 0; padding: 0; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px 5px 12px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.chip button {
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.chip button:hover { color: var(--down); }
+
+/* ── Split picker ────────────────────────────────────────────────────────── */
+.split { margin: 0 0 4px; padding: 14px; border: 1px solid var(--line); border-radius: 11px; }
+
+.split legend {
+  padding: 0 6px;
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.split-mode { display: flex; gap: 16px; margin-bottom: 10px; }
+.split-mode label { margin: 0; display: flex; align-items: center; gap: 6px; font-size: 12.5px; }
+.split-mode input { margin: 0; }
+
+.participants { display: grid; gap: 7px; }
+
+.participant { display: flex; align-items: center; gap: 10px; }
+.participant .who { flex: 1; margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--ink); font-weight: 500; }
+.participant .exact { width: 110px; margin: 0; padding: 6px 9px; font-size: 13px; }
+
+/* ── Balances ────────────────────────────────────────────────────────────── */
+.balances, .settlements, .expenses { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+
+.balance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 13px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+}
+
+.balance .who { font-weight: 600; }
+.balance.up { background: var(--up-soft); border-color: transparent; }
+.balance.up .amt { color: var(--up); font-weight: 700; }
+.balance.down { background: var(--down-soft); border-color: transparent; }
+.balance.down .amt { color: var(--down); font-weight: 700; }
+.balance.level .amt { color: var(--muted); }
+
+/* ── Settlement ──────────────────────────────────────────────────────────── */
+.settle { border-color: var(--accent); }
+.lede { margin: -6px 0 12px; font-size: 13px; color: var(--muted); }
+
+.settlements { counter-reset: step; }
+
+.settlements li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 13px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  font-size: 13.5px;
+}
+
+.settlements .from { font-weight: 700; }
+.settlements .arrow { color: var(--muted); }
+.settlements .to { font-weight: 700; }
+.settlements .amt { margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ── History ─────────────────────────────────────────────────────────────── */
+.expense {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+}
+
+.expense div { flex: 1; min-width: 0; }
+.expense strong { display: block; font-size: 13.5px; }
+.expense small { color: var(--muted); font-size: 11.5px; }
+.expense .amt { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 13.5px; }
+
+.expense button {
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.expense button:hover { color: var(--down); }
+
+.none { padding: 14px; text-align: center; color: var(--muted); font-size: 13px; }

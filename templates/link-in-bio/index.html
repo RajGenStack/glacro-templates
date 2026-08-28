@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aarav Mehta — Links</title>
+<meta name="description" content="One page, every link. Edit profile.js and deploy — no build step, no dependencies.">
+
+<!-- Social preview. Change the URL and image once the site is live; both must be
+     absolute, because crawlers do not resolve relative paths. -->
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Aarav Mehta — Links">
+<meta property="og:description" content="Product designer in Bengaluru. Everything I make, in one place.">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🔗</text></svg>">
+</head>
+<body>
+
+<a class="skip" href="#links">Skip to links</a>
+
+<main class="page">
+  <header class="profile">
+    <div class="avatar" id="avatar" aria-hidden="true"></div>
+    <h1 id="name">—</h1>
+    <p class="handle" id="handle"></p>
+    <p class="bio" id="bio"></p>
+    <ul class="socials" id="socials" aria-label="Social profiles"></ul>
+  </header>
+
+  <nav id="links" class="links" aria-label="Links"></nav>
+
+  <section class="now" id="nowCard" hidden>
+    <h2>Currently</h2>
+    <p id="nowText"></p>
+  </section>
+
+  <footer class="foot">
+    <p id="footNote"></p>
+    <button type="button" id="shareBtn" class="share">Share this page</button>
+  </footer>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="profile.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

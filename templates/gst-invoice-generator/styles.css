@@ -1,0 +1,338 @@
+/* GST Invoice Generator — screen and print styles.
+   The print rules matter as much as the screen ones: "Save as PDF" from the
+   browser is the whole delivery mechanism, so the editor is hidden, the page
+   is forced to A4 margins, and the invoice is allowed to break across pages
+   without splitting a table row down the middle. */
+
+:root {
+  --bg: #f6f5f3;
+  --panel: #ffffff;
+  --ink: #16150f;
+  --muted: #6f6a61;
+  --line: #e5e1da;
+  --accent: #1b5e3f;
+  --accent-soft: #e8f2ec;
+  --danger: #b3261e;
+  --radius: 12px;
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Top bar ─────────────────────────────────────────────────────────────── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand { display: flex; align-items: center; gap: 12px; }
+
+.brand .mark {
+  width: 38px; height: 38px;
+  display: grid; place-items: center;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.brand strong { display: block; font-size: 15px; }
+.brand small { color: var(--muted); font-size: 12px; }
+
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.btn {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+}
+
+.btn:hover { border-color: var(--ink); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { background: #164c33; }
+.btn.wide { width: 100%; margin-top: 4px; }
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 400px) 1fr;
+  gap: 24px;
+  align-items: start;
+  padding: 24px;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; }
+}
+
+/* ── Editor ──────────────────────────────────────────────────────────────── */
+.editor { display: grid; gap: 16px; }
+
+fieldset {
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+legend {
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+label .opt { font-weight: 400; text-transform: none; opacity: .7; }
+
+input, select, textarea {
+  width: 100%;
+  margin-top: 5px;
+  padding: 9px 11px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  background: #fcfcfb;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+textarea { resize: vertical; }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.hint { margin: -6px 0 12px; font-size: 11.5px; min-height: 1em; color: var(--muted); }
+.hint.ok { color: var(--accent); }
+.hint.bad { color: var(--danger); }
+
+.privacy {
+  margin: 0;
+  padding: 12px 14px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+  background: var(--accent-soft);
+  border-radius: var(--radius);
+}
+
+/* ── Line item rows ──────────────────────────────────────────────────────── */
+.item-rows { display: grid; gap: 8px; margin-bottom: 8px; }
+
+.item-row {
+  display: grid;
+  grid-template-columns: 1fr 74px 56px 82px 74px 28px;
+  gap: 6px;
+  align-items: center;
+}
+
+.item-row input, .item-row select { margin-top: 0; padding: 7px 8px; font-size: 13px; }
+
+.item-row .remove {
+  width: 28px; height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.item-row .remove:hover { border-color: var(--danger); color: var(--danger); }
+
+@media (max-width: 620px) {
+  .item-row { grid-template-columns: 1fr 1fr 28px; }
+}
+
+/* ── Invoice preview ─────────────────────────────────────────────────────── */
+.preview { min-width: 0; }
+
+.invoice {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 40px;
+  max-width: 860px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+}
+
+.inv-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.inv-head h1 { margin: 0 0 6px; font-size: 21px; letter-spacing: -.01em; }
+.inv-head h2 { margin: 0 0 8px; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+
+.muted { color: var(--muted); font-size: 12.5px; margin: 2px 0; white-space: pre-line; }
+
+.inv-meta table { border-collapse: collapse; font-size: 12.5px; }
+.inv-meta td { padding: 2px 14px 2px 0; color: var(--muted); }
+.inv-meta th { padding: 2px 0; text-align: right; font-weight: 600; }
+
+.parties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.parties h3 {
+  margin: 0 0 6px;
+  font-size: 10.5px;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.parties p { margin: 2px 0; font-size: 13px; }
+
+.lines { width: 100%; border-collapse: collapse; margin: 22px 0; font-size: 12.5px; }
+
+.lines thead th {
+  padding: 9px 8px;
+  text-align: left;
+  font-size: 10.5px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
+
+.lines tbody td { padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.lines .c-num { text-align: right; white-space: nowrap; }
+.lines .c-hsn { color: var(--muted); }
+.lines .c-desc { width: 34%; }
+
+.totals-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.hsn-summary h3 {
+  margin: 0 0 8px;
+  font-size: 10.5px;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.hsn-summary table { border-collapse: collapse; font-size: 12px; }
+.hsn-summary th, .hsn-summary td { padding: 5px 16px 5px 0; text-align: left; }
+.hsn-summary thead th { color: var(--muted); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; }
+
+.totals { border-collapse: collapse; min-width: 280px; font-size: 13px; margin-left: auto; }
+.totals td { padding: 6px 0; }
+.totals td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+.totals .grand td {
+  padding-top: 10px;
+  border-top: 2px solid var(--ink);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.in-words {
+  margin: 22px 0 0;
+  padding: 12px 14px;
+  font-size: 12.5px;
+  background: var(--accent-soft);
+  border-radius: 8px;
+}
+
+.in-words span { color: var(--muted); }
+
+.inv-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 30px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.inv-foot .muted { max-width: 60%; }
+
+.sign { text-align: center; }
+.sign-line { width: 190px; border-bottom: 1px solid var(--ink); margin-bottom: 6px; height: 40px; }
+.sign small { color: var(--muted); font-size: 11px; }
+
+/* ── Print ───────────────────────────────────────────────────────────────── */
+@media print {
+  @page { size: A4; margin: 14mm; }
+
+  html, body { background: #fff; font-size: 11.5pt; }
+
+  /* The editor, the toolbar and anything else marked no-print disappear so the
+     PDF contains the invoice and nothing else. */
+  .no-print { display: none !important; }
+
+  .layout { display: block; padding: 0; max-width: none; }
+
+  .invoice {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    max-width: none;
+  }
+
+  /* Never split a line item or the totals block across a page boundary. */
+  .lines tr, .totals, .in-words, .inv-foot { break-inside: avoid; }
+  .lines thead { display: table-header-group; }
+}

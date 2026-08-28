@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coriander House — Menu</title>
+<meta name="description" content="A digital menu built for the phone a customer is holding at the table. Veg/non-veg marks, allergens, search, and no app to install.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="kicker" id="kicker"></p>
+    <h1 id="restaurantName">—</h1>
+    <p class="tagline" id="tagline"></p>
+    <p class="meta" id="meta"></p>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="controls-inner">
+    <label class="search">
+      <span class="sr-only">Search the menu</span>
+      <input type="search" id="search" placeholder="Search dishes, e.g. paneer, biryani…" autocomplete="off">
+    </label>
+    <div class="filters" id="dietFilters" role="group" aria-label="Dietary filter">
+      <button type="button" class="filter on" data-diet="all">All</button>
+      <button type="button" class="filter" data-diet="veg">Veg</button>
+      <button type="button" class="filter" data-diet="egg">Egg</button>
+      <button type="button" class="filter" data-diet="nonveg">Non-veg</button>
+    </div>
+  </div>
+  <nav class="jump" id="jump" aria-label="Jump to section"></nav>
+</div>
+
+<main id="menu" class="menu"></main>
+
+<p class="no-results" id="noResults" hidden>Nothing matches that search.</p>
+
+<footer class="foot">
+  <p id="footNote"></p>
+  <p class="disclaimer" id="disclaimer"></p>
+</footer>
+
+<script src="menu-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

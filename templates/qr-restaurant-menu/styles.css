@@ -1,0 +1,268 @@
+/* QR restaurant menu — phone first, then it widens gracefully. */
+
+:root {
+  --bg: #fbf8f3;
+  --panel: #ffffff;
+  --ink: #201b12;
+  --muted: #756c5e;
+  --line: #e8e0d3;
+  --accent: #8a3a1a;
+  --veg: #17803d;
+  --egg: #c98a12;
+  --nonveg: #b3261e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14120f;
+    --panel: #1c1915;
+    --ink: #f4efe6;
+    --muted: #a49a8a;
+    --line: #2c2721;
+    --accent: #e08a5c;
+    --veg: #4bbd6f;
+    --egg: #e0b447;
+    --nonveg: #e2705f;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: ui-serif, Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+.hero {
+  padding: 40px 20px 30px;
+  text-align: center;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-inner { max-width: 620px; margin: 0 auto; }
+
+.kicker {
+  margin: 0 0 10px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.hero h1 { margin: 0 0 8px; font-size: 34px; font-weight: 400; letter-spacing: -.01em; }
+.tagline { margin: 0 0 14px; color: var(--muted); font-size: 15px; font-style: italic; }
+
+.meta {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── Controls ────────────────────────────────────────────────────────────── */
+.controls {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.controls-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 12px 20px;
+}
+
+.search { flex: 1 1 200px; min-width: 0; margin: 0; }
+
+.search input {
+  width: 100%;
+  padding: 9px 13px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  outline: none;
+}
+
+.search input:focus { border-color: var(--accent); }
+
+.filters { display: flex; gap: 5px; }
+
+.filter {
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.filter.on { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+
+/* Horizontal scroller — the page body itself must never scroll sideways. */
+.jump {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 0 20px 10px;
+  scrollbar-width: none;
+}
+
+.jump::-webkit-scrollbar { display: none; }
+
+.jump a {
+  flex: 0 0 auto;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.jump a:hover { color: var(--ink); border-color: var(--ink); }
+
+/* ── Menu ────────────────────────────────────────────────────────────────── */
+.menu { max-width: 620px; margin: 0 auto; padding: 10px 20px 40px; }
+
+.section { padding-top: 26px; scroll-margin-top: 110px; }
+
+.section-head { margin-bottom: 14px; }
+
+.section-head h2 {
+  margin: 0;
+  font-size: 13px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.section-head p { margin: 6px 0 0; font-size: 13.5px; font-style: italic; color: var(--muted); }
+
+.items { list-style: none; margin: 0; padding: 0; }
+
+.item {
+  display: flex;
+  gap: 12px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.item:last-child { border-bottom: none; }
+
+/* The square veg/non-veg mark Indian menus carry. */
+.mark {
+  flex: 0 0 auto;
+  width: 15px; height: 15px;
+  margin-top: 5px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  position: relative;
+}
+
+.mark::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.mark.veg { color: var(--veg); }
+.mark.egg { color: var(--egg); }
+.mark.nonveg { color: var(--nonveg); }
+
+.item-body { flex: 1; min-width: 0; }
+
+.item-head { display: flex; gap: 14px; align-items: baseline; justify-content: space-between; }
+.item-head h3 { margin: 0; font-size: 17px; font-weight: 500; }
+
+.price {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.desc { margin: 4px 0 0; font-size: 14px; color: var(--muted); }
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 7px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.spice { font-size: 11px; letter-spacing: -1px; }
+
+.tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.allergen { font-size: 11px; font-style: italic; color: var(--muted); }
+
+.no-results { max-width: 620px; margin: 0 auto; padding: 40px 20px; text-align: center; color: var(--muted); }
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.foot {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 26px 20px 50px;
+  text-align: center;
+  border-top: 1px solid var(--line);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); }
+.disclaimer { font-size: 11.5px; opacity: .85; }
+
+@media print {
+  .controls, .jump { display: none; }
+  body { background: #fff; }
+}

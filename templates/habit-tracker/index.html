@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Streak — Habit Tracker</title>
+<meta name="description" content="Track daily habits with streaks and a year heatmap. Works offline, stores everything in your browser, exports to JSON.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="mark" aria-hidden="true"></span>
+    <div>
+      <strong>Streak</strong>
+      <small id="todayLabel"></small>
+    </div>
+  </div>
+  <div class="actions">
+    <button type="button" id="exportBtn" class="btn ghost">Export</button>
+    <label class="btn ghost file">
+      Import
+      <input type="file" id="importInput" accept="application/json" hidden>
+    </label>
+    <button type="button" id="themeBtn" class="btn ghost" aria-label="Toggle theme">◐</button>
+  </div>
+</header>
+
+<main>
+  <section class="summary" aria-label="Overview">
+    <div class="stat"><span id="statToday">0/0</span><small>done today</small></div>
+    <div class="stat"><span id="statBest">0</span><small>longest streak</small></div>
+    <div class="stat"><span id="statRate">—</span><small>last 30 days</small></div>
+  </section>
+
+  <form id="addForm" class="add-form">
+    <input type="text" id="habitName" maxlength="40" placeholder="Add a habit — read 20 pages, walk 5k, no sugar…" required>
+    <div class="colors" id="colorPicker" role="radiogroup" aria-label="Colour"></div>
+    <button type="submit" class="btn primary">Add</button>
+  </form>
+
+  <p id="emptyState" class="empty" hidden>
+    No habits yet. Add one above — everything is stored in this browser, so it
+    keeps working with no account and no connection.
+  </p>
+
+  <ul id="habitList" class="habits"></ul>
+
+  <section class="year" aria-label="Year overview">
+    <div class="year-head">
+      <h2>Last 12 months</h2>
+      <select id="heatmapHabit" aria-label="Habit shown in heatmap"></select>
+    </div>
+    <div class="heatmap-scroll">
+      <div id="heatmap" class="heatmap"></div>
+    </div>
+    <div class="legend">
+      <span>Less</span>
+      <i class="lv0"></i><i class="lv1"></i><i class="lv2"></i><i class="lv3"></i><i class="lv4"></i>
+      <span>More</span>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
