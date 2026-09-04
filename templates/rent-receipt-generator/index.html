@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rent Receipt Generator</title>
+<meta name="description" content="Generate a year of rent receipts for HRA tax exemption. Works out the revenue stamp rule, splits by month, and prints to PDF. Nothing leaves your device.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar no-print">
+  <div class="brand">
+    <span class="mark">₹</span>
+    <div>
+      <strong>Rent Receipt Generator</strong>
+      <small>Everything stays in your browser</small>
+    </div>
+  </div>
+  <div class="actions">
+    <button type="button" id="loadSample" class="btn ghost">Load sample</button>
+    <button type="button" id="resetAll" class="btn ghost">Reset</button>
+    <button type="button" id="printBtn" class="btn primary">Print / Save PDF</button>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ── Form ─────────────────────────────────────────────────────── -->
+  <section class="panel no-print" aria-label="Receipt details">
+    <h2>Details</h2>
+
+    <div class="field">
+      <label for="tenant">Tenant name</label>
+      <input id="tenant" type="text" autocomplete="name" placeholder="Name as on your payslip">
+    </div>
+
+    <div class="field">
+      <label for="landlord">Landlord name</label>
+      <input id="landlord" type="text" placeholder="Who you pay">
+    </div>
+
+    <div class="field">
+      <label for="address">Rented address</label>
+      <textarea id="address" rows="3" placeholder="Flat, building, street, city, PIN"></textarea>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="rent">Monthly rent (&#8377;)</label>
+        <input id="rent" type="number" min="0" step="1" inputmode="numeric" placeholder="0">
+      </div>
+      <div class="field">
+        <label for="payMode">Paid by</label>
+        <select id="payMode">
+          <option value="Bank transfer">Bank transfer</option>
+          <option value="UPI">UPI</option>
+          <option value="Cheque">Cheque</option>
+          <option value="Cash">Cash</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="fromMonth">From</label>
+        <input id="fromMonth" type="month">
+      </div>
+      <div class="field">
+        <label for="toMonth">To</label>
+        <input id="toMonth" type="month">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="pan">Landlord PAN <span class="opt">(optional)</span></label>
+      <input id="pan" type="text" maxlength="10" placeholder="ABCDE1234F" style="text-transform:uppercase">
+      <p class="hint" id="panHint">
+        Required by the employer only when annual rent is above &#8377;1,00,000.
+      </p>
+    </div>
+
+    <p class="note" id="stampNote" hidden></p>
+    <p class="error" id="formError" role="alert" hidden></p>
+  </section>
+
+  <!-- ── Receipts ─────────────────────────────────────────────────── -->
+  <section class="output" aria-label="Generated receipts">
+    <div class="summary no-print" id="summary" hidden></div>
+    <div id="receipts"></div>
+    <p class="empty no-print" id="emptyState">
+      Fill in the details and receipts appear here, one per month.
+    </p>
+  </section>
+
+</main>
+
+<footer class="foot no-print">
+  <p>
+    Runs entirely offline. Nothing is uploaded, stored or sent anywhere &mdash;
+    close the tab and it is gone.
+  </p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+/* Rent Receipt Generator
+   Screen: a two-column workspace, form left, receipts right.
+   Print:  only the receipts, one per page, no chrome. */
+
+:root {
+  --ground: #fbfaf9;
+  --surface: #ffffff;
+  --line: #e6e2dd;
+  --ink: #1b1a17;
+  --soft: #6b6560;
+  --faint: #9a938c;
+  --accent: #2f6fd0;
+  --warn-bg: #fdf4e3;
+  --warn-ink: #8a5d12;
+  --err-bg: #fdecea;
+  --err-ink: #a83226;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font: 15px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Top bar ─────────────────────────────────────────────────────────── */
+.topbar {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  align-items: center; justify-content: space-between;
+  padding: 14px 22px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.mark {
+  display: grid; place-items: center;
+  width: 38px; height: 38px; border-radius: 10px;
+  background: var(--ink); color: #fff; font-size: 19px; font-weight: 700;
+}
+.brand strong { display: block; font-size: 15px; }
+.brand small { color: var(--faint); font-size: 12px; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.btn {
+  font: 600 13px/1 inherit;
+  padding: 9px 15px; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  cursor: pointer; transition: border-color .15s, background .15s;
+}
+.btn:hover { border-color: var(--faint); }
+.btn.primary { background: var(--ink); border-color: var(--ink); color: #fff; }
+.btn.primary:hover { background: var(--accent); border-color: var(--accent); }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ── Layout ──────────────────────────────────────────────────────────── */
+.layout {
+  display: grid; gap: 22px;
+  grid-template-columns: minmax(300px, 380px) 1fr;
+  align-items: start;
+  max-width: 1180px; margin: 0 auto; padding: 22px;
+}
+@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex; flex-direction: column; gap: 14px;
+  position: sticky; top: 22px;
+}
+@media (max-width: 860px) { .panel { position: static; } }
+
+.panel h2 { margin: 0; font-size: 13px; text-transform: uppercase; letter-spacing: .09em; color: var(--faint); }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 12.5px; font-weight: 600; color: var(--soft); }
+.opt { font-weight: 400; color: var(--faint); }
+
+input, select, textarea {
+  font: inherit;
+  padding: 9px 11px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: var(--surface); color: var(--ink);
+  outline: none; transition: border-color .15s;
+  width: 100%;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+textarea { resize: vertical; }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.hint { margin: 2px 0 0; font-size: 12px; color: var(--faint); line-height: 1.45; }
+.hint.warn { color: var(--warn-ink); }
+
+.note, .error {
+  margin: 0; padding: 10px 12px; border-radius: 8px;
+  font-size: 12.5px; line-height: 1.45;
+}
+.note { background: var(--warn-bg); color: var(--warn-ink); }
+.error { background: var(--err-bg); color: var(--err-ink); }
+
+/* ── Receipts ────────────────────────────────────────────────────────── */
+.output { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+
+.summary {
+  font-size: 12px; text-transform: uppercase; letter-spacing: .09em;
+  color: var(--faint);
+}
+
+.empty {
+  margin: 0; padding: 46px 20px; text-align: center;
+  border: 1px dashed var(--line); border-radius: 14px;
+  color: var(--faint); font-size: 14px;
+}
+
+#receipts { display: flex; flex-direction: column; gap: 14px; }
+
+.receipt {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px 24px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+.r-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
+.r-head h3 { margin: 0; font-size: 16px; letter-spacing: -.01em; }
+.r-period { font-size: 12px; text-transform: uppercase; letter-spacing: .09em; color: var(--faint); }
+
+.r-line { margin: 0; font-size: 14.5px; line-height: 1.7; }
+
+.r-foot {
+  display: flex; flex-wrap: wrap; gap: 20px;
+  align-items: flex-end; justify-content: space-between;
+  border-top: 1px solid var(--line); padding-top: 14px;
+}
+.r-meta { display: flex; gap: 26px; flex-wrap: wrap; }
+.r-meta div { display: flex; flex-direction: column; gap: 2px; }
+.r-meta span { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--faint); }
+.r-meta strong { font-size: 13.5px; font-weight: 600; }
+
+.r-sign { display: flex; align-items: flex-end; gap: 12px; }
+.r-sign span { font-size: 12px; color: var(--soft); }
+.sign-line { width: 150px; border-bottom: 1px solid var(--ink); height: 26px; }
+.stamp {
+  width: 62px; height: 62px;
+  border: 1px dashed var(--faint); border-radius: 4px;
+  display: grid; place-items: center; text-align: center;
+  font-size: 9px; line-height: 1.25; color: var(--faint);
+}
+
+.foot { padding: 8px 22px 28px; text-align: center; }
+.foot p { margin: 0; font-size: 12px; color: var(--faint); }
+
+/* ── Print ───────────────────────────────────────────────────────────── */
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; }
+  .layout { display: block; max-width: none; padding: 0; }
+  #receipts { gap: 0; }
+  .receipt {
+    border: 0; border-radius: 0; padding: 26mm 20mm;
+    page-break-after: always; break-after: page;
+  }
+  .receipt:last-child { page-break-after: auto; break-after: auto; }
+  .sign-line { border-bottom-color: #000; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
