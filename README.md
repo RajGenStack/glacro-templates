@@ -1,13 +1,14 @@
-# ObsidianX Templates
+# Glacro Templates
 
-Production-ready starter projects for [ObsidianX](https://obsidianx.online). Every
-one is a real, working application -- not a snippet -- and every one deploys as-is.
+Starter projects for [Glacro](https://glacro.com). Every one is a real, working
+application -- not a snippet -- and every one deploys as-is.
 
 ## What's here
 
 | Template | What it is | Stack |
 | --- | --- | --- |
-| [`gst-invoice-generator`](templates/gst-invoice-generator) | Create a GST-compliant Indian tax invoice in the browser and save it as a PDF. Nothing is uploaded anywhere. | Static (HTML/CSS/JS) |
+| [`gst-invoice-generator`](templates/gst-invoice-generator) | Create an Indian GST tax invoice in the browser and save it as a PDF. Nothing is uploaded anywhere. | Static (HTML/CSS/JS) |
+| [`rent-receipt-generator`](templates/rent-receipt-generator) | Generate a year of rent receipts for claiming HRA exemption. Everything runs in the browser and nothing is uploaded anywhere. | Static (HTML/CSS/JS) |
 | [`habit-tracker`](templates/habit-tracker) | Track daily habits with streaks and a twelve-month heatmap. Offline, no account, exports to JSON. | Static (HTML/CSS/JS) |
 | [`link-in-bio`](templates/link-in-bio) | One page, every link. Five themes, inline SVG social icons, native share sheet. | Static (HTML/CSS/JS) |
 | [`expense-splitter`](templates/expense-splitter) | Split trip and flatmate expenses, then settle up in the fewest possible payments. | Static (HTML/CSS/JS) |
@@ -15,8 +16,9 @@ one is a real, working application -- not a snippet -- and every one deploys as-
 
 ## Deploying one
 
-In the ObsidianX dashboard, create a project from this repository and set the
-**Root Directory** to the template you want:
+Pick a template on [glacro.com/templates](https://glacro.com/templates) and choose
+**Deploy This**, or create a project from this repository in the Glacro dashboard
+and set the **Root Directory** to the template you want:
 
 ```
 templates/gst-invoice-generator
